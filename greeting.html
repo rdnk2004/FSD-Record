@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greeting Generator</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 360px;
+            width: 100%;
+        }
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+        }
+        input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        button {
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        .greeting {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 500;
+            color: #1f2937;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="margin-top: 0; color: #111827;">Greeting Generator</h2>
+        <input type="text" id="username" placeholder="Enter your name">
+        <button id="showBtn">Show Greeting</button>
+        <div id="result" class="greeting"></div>
+    </div>
+
+    <script>
+        document.getElementById('showBtn').addEventListener('click', () => {
+            const name = document.getElementById('username').value.trim() || 'Guest';
+            document.getElementById('result').textContent = `Welcome, ${name} ! Have a Nice Day.`;
+        });
+    </script>
+</body>
+</html>

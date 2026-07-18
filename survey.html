@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Fan Preferences Survey</title>
+    <link rel="stylesheet" href="survey.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Football Fan Preferences Survey</h1>
+        <p class="description">Thank you for taking the time to share your football interests with us!</p>
+        
+        <form action="#" method="POST">
+            <!-- Text Input fields -->
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+            </div>
+
+            <!-- Dropdown select option -->
+            <div class="form-group">
+                <label for="league">Favorite Football League</label>
+                <select id="league" name="league" required>
+                    <option value="" disabled selected>Select a league</option>
+                    <option value="premier-league">English Premier League</option>
+                    <option value="la-liga">La Liga (Spain)</option>
+                    <option value="bundesliga">Bundesliga (Germany)</option>
+                    <option value="serie-a">Serie A (Italy)</option>
+                    <option value="other">Other / None</option>
+                </select>
+            </div>
+
+            <!-- Radio buttons -->
+            <div class="form-group">
+                <label>How often do you watch football matches?</label>
+                <div class="choice-group">
+                    <label>
+                        <input type="radio" name="watch-frequency" value="daily" required> Every day
+                    </label>
+                    <label>
+                        <input type="radio" name="watch-frequency" value="weekly"> A few times a week
+                    </label>
+                    <label>
+                        <input type="radio" name="watch-frequency" value="rarely"> Rarely or never
+                    </label>
+                </div>
+            </div>
+
+            <!-- Checkboxes -->
+            <div class="form-group">
+                <label>Which football items do you own? (Select all that apply)</label>
+                <div class="choice-group">
+                    <label>
+                        <input type="checkbox" name="items" value="jersey"> Team Jersey
+                    </label>
+                    <label>
+                        <input type="checkbox" name="items" value="scarf"> Team Scarf
+                    </label>
+                    <label>
+                        <input type="checkbox" name="items" value="football"> Football (Ball)
+                    </label>
+                    <label>
+                        <input type="checkbox" name="items" value="videogame"> Football Video Games
+                    </label>
+                </div>
+            </div>
+
+            <!-- Textarea field -->
+            <div class="form-group">
+                <label for="comments">Any comments or suggestions?</label>
+                <textarea id="comments" name="comments" rows="4" placeholder="Type your feedback here..."></textarea>
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit">Submit Survey</button>
+        </form>
+    </div>
+</body>
+</html>
