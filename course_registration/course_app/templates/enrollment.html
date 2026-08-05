@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enrollment Management</title>
+    <style>
+        body { font-family: Arial; margin: 30px; background: #f4f4f4; }
+        .container { width: 70%; margin: auto; background: white; padding: 20px; border-radius: 5px; }
+        .nav a { text-decoration: none; padding: 6px 12px; background: #007bff; color: white; border-radius: 3px; margin-right: 5px; }
+        input, select { width: 100%; padding: 8px; margin-bottom: 10px; box-sizing: border-box; }
+        button { background: #28a745; color: white; border: none; padding: 8px 15px; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background: #007bff; color: white; }
+        .edit { background: #ffc107; color: black; padding: 4px 8px; text-decoration: none; border-radius: 3px; }
+        .delete { background: #dc3545; color: white; padding: 4px 8px; text-decoration: none; border-radius: 3px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Enrollment Management</h2>
+    <div class="nav">
+        <a href="/">Home</a><a href="/students/">Students</a><a href="/courses/">Courses</a>
+    </div><hr>
+    <form method="POST" action="{% if enrollment %}{% url 'edit_enrollment' enrollment.id %}{% else %}{% url 'enrollment' %}{% endif %}">
+        {% csrf_token %}
+        <label>Student</label>
+        <select name="student" required>
+            <option value="">-- Select Student --</option>
+            {% for s in students %}
+            <option value="{{ s.id }}" {% if enrollment.student.id == s.id %}selected{% endif %}>{{ s.name }}</option>
+            {% endfor %}
+        </select>
+        <label>Course</label>
+        <select name="course" required>
+            <option value="">-- Select Course --</option>
+            {% for c in courses %}
+            <option value="{{ c.id }}" {% if enrollment.course.id == c.id %}selected{% endif %}>{{ c.name }}</option>
+            {% endfor %}
+        </select>
+        <label>Semester</label>
+        <input type="text" name="semester" value="{{ enrollment.semester|default:'' }}" required>
+        <button type="submit">{% if enrollment %}Update Enrollment{% else %}Enroll Student{% endif %}</button>
+    </form>
+    <hr>
+    <h3>Existing Enrollments</h3>
+    <table>
+        <tr><th>Student</th><th>Course</th><th>Semester</th><th>Action</th></tr>
+        {% for e in enrollments %}
+        <tr>
+            <td>{{ e.student.name }}</td><td>{{ e.course.name }}</td><td>{{ e.semester }}</td>
+            <td>
+                <a class="edit" href="{% url 'edit_enrollment' e.id %}">Edit</a>
+                <a class="delete" href="{% url 'delete_enrollment' e.id %}" onclick="return confirm('Delete enrollment?')">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">No enrollments available.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+</body>
+</html>

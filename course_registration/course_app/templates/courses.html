@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course Management</title>
+    <style>
+        body { font-family: Arial; margin: 30px; background: #f4f4f4; }
+        .container { width: 70%; margin: auto; background: white; padding: 20px; border-radius: 5px; }
+        .nav a { text-decoration: none; padding: 6px 12px; background: #007bff; color: white; border-radius: 3px; margin-right: 5px; }
+        input { width: 100%; padding: 8px; margin-bottom: 10px; box-sizing: border-box; }
+        button { background: #28a745; color: white; border: none; padding: 8px 15px; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background: #007bff; color: white; }
+        .edit { background: #ffc107; color: black; padding: 4px 8px; text-decoration: none; border-radius: 3px; }
+        .delete { background: #dc3545; color: white; padding: 4px 8px; text-decoration: none; border-radius: 3px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Course Management</h2>
+    <div class="nav">
+        <a href="/">Home</a><a href="/students/">Students</a><a href="/enrollment/">Enrollments</a>
+    </div><hr>
+    <form method="POST" action="{% if course %}{% url 'edit_course' course.id %}{% else %}{% url 'courses' %}{% endif %}">
+        {% csrf_token %}
+        <label>Course Name</label>
+        <input type="text" name="name" value="{{ course.name|default:'' }}" required>
+        <label>Course Code</label>
+        <input type="text" name="code" value="{{ course.course_code|default:'' }}" required>
+        <label>Credits</label>
+        <input type="number" name="credits" value="{{ course.credits|default:'' }}" required>
+        <button type="submit">{% if course %}Update Course{% else %}Add Course{% endif %}</button>
+    </form>
+    <hr>
+    <h3>Existing Courses</h3>
+    <table>
+        <tr><th>Name</th><th>Code</th><th>Credits</th><th>Action</th></tr>
+        {% for c in courses %}
+        <tr>
+            <td>{{ c.name }}</td><td>{{ c.course_code }}</td><td>{{ c.credits }}</td>
+            <td>
+                <a class="edit" href="{% url 'edit_course' c.id %}">Edit</a>
+                <a class="delete" href="{% url 'delete_course' c.id %}" onclick="return confirm('Delete course?')">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">No courses available.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+</body>
+</html>

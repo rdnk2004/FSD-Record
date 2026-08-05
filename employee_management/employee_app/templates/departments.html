@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Departments</title>
+    <style>
+        body { font-family: Arial; margin: 30px; background: #f4f4f4; }
+        .container { width: 70%; margin: auto; background: white; padding: 20px; border-radius: 5px; }
+        .nav a { text-decoration: none; padding: 6px 12px; background: #007bff; color: white; border-radius: 3px; margin-right: 5px; }
+        input { width: 100%; padding: 8px; margin-bottom: 10px; box-sizing: border-box; }
+        button { background: #28a745; color: white; border: none; padding: 8px 15px; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background: #007bff; color: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Manage Departments</h2>
+    <div class="nav">
+        <a href="/">Home</a><a href="/employees/">Employees</a>
+    </div><hr>
+    <form method="POST" action="{% url 'departments' %}">
+        {% csrf_token %}
+        <label>Department Name</label>
+        <input type="text" name="name" required>
+        <button type="submit">Add Department</button>
+    </form>
+    <hr>
+    <h3>Existing Departments</h3>
+    <table>
+        <tr><th>ID</th><th>Department Name</th></tr>
+        {% for d in departments %}
+        <tr><td>{{ d.id }}</td><td>{{ d.name }}</td></tr>
+        {% empty %}
+        <tr><td colspan="2">No departments available.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+</body>
+</html>
