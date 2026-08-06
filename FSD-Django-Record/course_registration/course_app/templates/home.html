@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course Registration</title>
+    <style>
+        body { font-family: Arial; margin: 30px; background: #f4f4f4; }
+        .nav a { text-decoration: none; padding: 6px 12px; background: #007bff; color: white; border-radius: 3px; margin-right: 5px; }
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 15px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background: #007bff; color: white; }
+    </style>
+</head>
+<body>
+    <h2>Course Registration System</h2>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/students/">Students</a>
+        <a href="/courses/">Courses</a>
+        <a href="/enrollment/">Enrollments</a>
+    </div>
+    <hr>
+    <form method="GET">
+        Search Student: <input type="text" name="search" value="{{ request.GET.search|default:'' }}">
+        <button type="submit">Search</button>
+    </form>
+    <form method="GET">
+        Filter Course:
+        <select name="course">
+            <option value="">All Courses</option>
+            {% for c in courses %}
+            <option value="{{ c.id }}" {% if request.GET.course == c.id|stringformat:"i" %}selected{% endif %}>{{ c.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+    <table>
+        <tr><th>Student</th><th>Course</th><th>Semester</th></tr>
+        {% for e in enrollments %}
+        <tr><td>{{ e.student.name }}</td><td>{{ e.course.name }}</td><td>{{ e.semester }}</td></tr>
+        {% empty %}
+        <tr><td colspan="3">No enrollments found.</td></tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

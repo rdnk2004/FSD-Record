@@ -1,0 +1,10 @@
+{
+  "venvPath": "d:\\Academic Works\\Django-Cycle2",
+  "venv": "venv",
+  "extraPaths": [
+    "d:\\Academic Works\\Django-Cycle2\\venv\\Lib\\site-packages"
+  ],
+  "reportMissingTypeStubs": false,
+  "reportAttributeAccessIssue": false,
+  "reportIncompatibleMethodOverride": false
+}
