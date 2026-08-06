@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Salary Report</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #111827;
+            text-align: center;
+        }
+
+        .employee-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .employee-row span {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            color: #374151;
+            min-width: 25px;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .report-container {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            border: 1px solid #e5e7eb;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f9fafb;
+            color: #111827;
+            font-weight: 600;
+        }
+
+        td {
+            color: #4b5563;
+        }
+
+        .highlight-container {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+            color: #1e3a8a;
+            font-weight: 500;
+        }
+
+        .highlight-container strong {
+            color: #1d4ed8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Employee Salary Report</h2>
+        <div class="employee-row">
+            <span>1.</span>
+            <input type="text" id="name1" placeholder="Employee Name" required>
+            <input type="number" id="salary1" placeholder="Basic Salary (₹)" min="0" required>
+        </div>
+        <div class="employee-row">
+            <span>2.</span>
+            <input type="text" id="name2" placeholder="Employee Name" required>
+            <input type="number" id="salary2" placeholder="Basic Salary (₹)" min="0" required>
+        </div>
+        <div class="employee-row">
+            <span>3.</span>
+            <input type="text" id="name3" placeholder="Employee Name" required>
+            <input type="number" id="salary3" placeholder="Basic Salary (₹)" min="0" required>
+        </div>
+        <div class="employee-row">
+            <span>4.</span>
+            <input type="text" id="name4" placeholder="Employee Name" required>
+            <input type="number" id="salary4" placeholder="Basic Salary (₹)" min="0" required>
+        </div>
+        <div class="employee-row">
+            <span>5.</span>
+            <input type="text" id="name5" placeholder="Employee Name" required>
+            <input type="number" id="salary5" placeholder="Basic Salary (₹)" min="0" required>
+        </div>
+        <button id="reportBtn">Generate Report</button>
+        <div id="report" class="report-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Employee Name</th>
+                        <th>Basic Salary</th>
+                        <th>HRA (10%)</th>
+                        <th>DA (15%)</th>
+                        <th>Net Salary</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+            </table>
+            <div id="highest-salary-box" class="highlight-container"></div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('reportBtn').addEventListener('click', () => {
+            const employees = [];
+            for (let i = 1; i <= 5; i++) {
+                const name = document.getElementById(`name${i}`).value.trim();
+                const salary = parseFloat(document.getElementById(`salary${i}`).value);
+
+                if (!name || isNaN(salary) || salary < 0) {
+                    alert('Please enter a valid name and basic salary for all 5 employees.');
+                    return;
+                }
+                employees.push({ name, salary });
+            }
+            let tableHtml = '';
+            let highestEmp = employees[0];
+            employees.forEach(emp => {
+                const hra = emp.salary * 0.10;
+                const da = emp.salary * 0.15;
+                const net = emp.salary + hra + da;
+
+                if (net > (highestEmp.salary + (highestEmp.salary * 0.10) + (highestEmp.salary * 0.15))) {
+                    highestEmp = { ...emp, net };
+                } else if (emp === employees[0]) {
+                    highestEmp.net = net;
+                }
+                tableHtml += `
+                    <tr>
+                        <td>${emp.name}</td>
+                        <td>₹${emp.salary.toFixed(2)}</td>
+                        <td>₹${hra.toFixed(2)}</td>
+                        <td>₹${da.toFixed(2)}</td>
+                        <td><strong>₹${net.toFixed(2)}</strong></td>
+                    </tr>
+                `;
+            });
+            document.getElementById('table-body').innerHTML = tableHtml;
+            document.getElementById('highest-salary-box').innerHTML = `
+                Employee with the Highest Net Salary: <strong>${highestEmp.name}</strong> (₹${highestEmp.net.toFixed(2)})
+            `;
+            document.getElementById('report').style.display = 'block';
+        });
+    </script>
+</body>
+
+</html>

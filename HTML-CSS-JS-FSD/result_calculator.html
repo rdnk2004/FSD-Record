@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Result Calculator</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #111827;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            font-size: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .result-container {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            display: none;
+        }
+
+        .result-item {
+            margin: 10px 0;
+            font-size: 15px;
+            color: #374151;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .result-item strong {
+            color: #111827;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .pass {
+            background-color: #ecfdf5;
+            color: #059669;
+        }
+
+        .fail {
+            background-color: #fef2f2;
+            color: #dc2626;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Result Calculator</h2>
+        <div class="input-group">
+            <label for="s1">Subject 1 Marks</label>
+            <input type="number" id="s1" placeholder="Enter marks (0-100)" min="0" max="100" required>
+        </div>
+        <div class="input-group">
+            <label for="s2">Subject 2 Marks</label>
+            <input type="number" id="s2" placeholder="Enter marks (0-100)" min="0" max="100" required>
+        </div>
+        <div class="input-group">
+            <label for="s3">Subject 3 Marks</label>
+            <input type="number" id="s3" placeholder="Enter marks (0-100)" min="0" max="100" required>
+        </div>
+        <div class="input-group">
+            <label for="s4">Subject 4 Marks</label>
+            <input type="number" id="s4" placeholder="Enter marks (0-100)" min="0" max="100" required>
+        </div>
+        <div class="input-group">
+            <label for="s5">Subject 5 Marks</label>
+            <input type="number" id="s5" placeholder="Enter marks (0-100)" min="0" max="100" required>
+        </div>
+        <button id="calcBtn">Calculate Result</button>
+        <div id="results" class="result-container">
+            <div class="result-item"><span>Total Marks:</span> <strong id="total-val">0</strong></div>
+            <div class="result-item"><span>Average Marks:</span> <strong id="avg-val">0.00</strong></div>
+            <div class="result-item"><span>Grade:</span> <strong id="grade-val">-</strong></div>
+            <div class="result-item"><span>Subjects Passed:</span> <strong id="passed-val" class="badge pass">0</strong>
+            </div>
+            <div class="result-item"><span>Subjects Failed:</span> <strong id="failed-val" class="badge fail">0</strong>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('calcBtn').addEventListener('click', () => {
+            const marks = [];
+            for (let i = 1; i <= 5; i++) {
+                const val = parseFloat(document.getElementById(`s${i}`).value);
+                if (isNaN(val) || val < 0 || val > 100) {
+                    alert('Please enter valid marks between 0 and 100 for all subjects.');
+                    return;
+                }
+                marks.push(val);
+            }
+            const total = marks.reduce((acc, curr) => acc + curr, 0);
+            const average = total / marks.length;
+            let grade = 'F';
+            if (average >= 90) grade = 'A';
+            else if (average >= 80) grade = 'B';
+            else if (average >= 70) grade = 'C';
+            else if (average >= 40) grade = 'D';
+            let passed = 0;
+            let failed = 0;
+            marks.forEach(mark => {
+                if (mark >= 40) passed++;
+                else failed++;
+            });
+            document.getElementById('total-val').textContent = total;
+            document.getElementById('avg-val').textContent = average.toFixed(2);
+            document.getElementById('grade-val').textContent = grade;
+            document.getElementById('passed-val').textContent = passed;
+            document.getElementById('failed-val').textContent = failed;
+            document.getElementById('results').style.display = 'block';
+        });
+    </script>
+</body>
+
+</html>

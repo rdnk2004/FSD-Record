@@ -1,0 +1,79 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f6;
+    color: #333333;
+    margin: 0;
+    padding: 20px;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: 30px auto;
+    background-color: #ffffff;
+    padding: 30px;
+    border: 1px solid #cccccc;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 0;
+}
+
+.description {
+    text-align: center;
+    font-style: italic;
+    color: #777777;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #2c3e50;
+}
+
+/* Style for text inputs, select dropdowns, and textarea */
+input[type="text"],
+input[type="email"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    box-sizing: border-box; /* Ensures padding is included in width calculation */
+    font-size: 14px;
+}
+
+/* Style for the radio/checkbox choice lists */
+.choice-group label {
+    display: block;
+    font-weight: normal;
+    margin-bottom: 6px;
+    color: #333333;
+    cursor: pointer;
+}
+
+.choice-group input {
+    margin-right: 8px;
+}
+
+/* Submit button styling */
+button[type="submit"] {
+    background-color: #2c3e50;
+    color: #ffffff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+}
+
+button[type="submit"]:hover {
+    background-color: #1a252f;
+}

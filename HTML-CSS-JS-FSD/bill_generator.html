@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Bill Generator</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #111827;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            font-size: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+        input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        .result-container {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            display: none;
+        }
+        .result-item {
+            margin: 10px 0;
+            font-size: 15px;
+            color: #374151;
+            display: flex;
+            justify-content: space-between;
+        }
+        .result-item strong {
+            color: #111827;
+        }
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            width: fit-content;
+            margin: 15px auto 0;
+        }
+        .badge-high {
+            background-color: #fef3c7;
+            color: #d97706;
+            border: 1px solid #fde68a;
+        }
+        .badge-normal {
+            background-color: #ecfdf5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Bill Generator</h2>
+        
+        <div class="input-group">
+            <label for="p1">Product 1 Price (₹)</label>
+            <input type="number" id="p1" placeholder="Enter price" min="0" required>
+        </div>
+        <div class="input-group">
+            <label for="p2">Product 2 Price (₹)</label>
+            <input type="number" id="p2" placeholder="Enter price" min="0" required>
+        </div>
+        <div class="input-group">
+            <label for="p3">Product 3 Price (₹)</label>
+            <input type="number" id="p3" placeholder="Enter price" min="0" required>
+        </div>
+        <div class="input-group">
+            <label for="p4">Product 4 Price (₹)</label>
+            <input type="number" id="p4" placeholder="Enter price" min="0" required>
+        </div>
+        <div class="input-group">
+            <label for="p5">Product 5 Price (₹)</label>
+            <input type="number" id="p5" placeholder="Enter price" min="0" required>
+        </div>
+        
+        <button id="generateBtn">Generate Bill</button>
+        
+        <div id="results" class="result-container">
+            <div id="prices-list"></div>
+            <hr style="border: 0; border-top: 1px dashed #e5e7eb; margin: 15px 0;">
+            <div class="result-item"><span>Total Bill:</span> <strong id="total-val">₹0.00</strong></div>
+            <div class="result-item"><span>Average Price:</span> <strong id="avg-val">₹0.00</strong></div>
+            <div class="result-item"><span>Highest Priced Product:</span> <strong id="high-val">₹0.00</strong></div>
+            <div style="text-align: center;">
+                <div id="status-badge" class="badge"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('generateBtn').addEventListener('click', () => {
+            const prices = [];
+            for (let i = 1; i <= 5; i++) {
+                const val = parseFloat(document.getElementById(`p${i}`).value);
+                if (isNaN(val) || val < 0) {
+                    alert('Please enter valid positive numbers for all 5 product prices.');
+                    return;
+                }
+                prices.push(val);
+            }
+
+            // Calculations
+            const total = prices.reduce((acc, curr) => acc + curr, 0);
+            const average = total / prices.length;
+            const highest = Math.max(...prices);
+
+            // Display individual prices
+            let pricesHtml = '<div style="margin-bottom: 10px; font-weight: 500; color: #111827;">Product Prices:</div>';
+            prices.forEach((price, idx) => {
+                pricesHtml += `<div class="result-item"><span>Product ${idx + 1}:</span> <span>₹${price.toFixed(2)}</span></div>`;
+            });
+            document.getElementById('prices-list').innerHTML = pricesHtml;
+
+            // Display overall calculations
+            document.getElementById('total-val').textContent = `₹${total.toFixed(2)}`;
+            document.getElementById('avg-val').textContent = `₹${average.toFixed(2)}`;
+            document.getElementById('high-val').textContent = `₹${highest.toFixed(2)}`;
+
+            // Badge / Category status
+            const badge = document.getElementById('status-badge');
+            if (total > 5000) {
+                badge.className = 'badge badge-high';
+                badge.textContent = 'High Value Purchase';
+            } else {
+                badge.className = 'badge badge-normal';
+                badge.textContent = 'Normal Purchase';
+            }
+
+            // Show results container
+            document.getElementById('results').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
