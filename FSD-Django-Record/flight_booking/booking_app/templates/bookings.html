@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Flight Booking Module | Flight Management System{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 1.5rem;">Flight Booking Module</h1>
+
+<!-- Book a Flight Form -->
+<div class="card">
+    <h3 style="margin-bottom: 1rem; color: var(--primary);">Book a Flight for Passenger</h3>
+
+    <form method="POST" action="{% url 'book_flight' %}">
+        {% csrf_token %}
+        <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1.25rem; align-items: flex-end;">
+            <div class="form-group" style="margin:0;">
+                <label>Select Passenger</label>
+                <select name="passenger" required class="form-control">
+                    <option value="">-- Choose Registered Passenger --</option>
+                    {% for p in passengers %}
+                    <option value="{{ p.id }}">{{ p.name }} (Passport: {{ p.passport_number }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group" style="margin:0;">
+                <label>Select Available Flight</label>
+                <select name="flight" required class="form-control">
+                    <option value="">-- Choose Flight --</option>
+                    {% for f in flights %}
+                    <option value="{{ f.id }}">{{ f.flight_number }} | {{ f.source }} → {{ f.destination }} (Date: {{ f.departure_date|date:"Y-m-d" }}, Seats Left: {{ f.available_seats }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="height: 40px;">Confirm Booking 🎟</button>
+        </div>
+    </form>
+
+    {% if not passengers %}
+    <p style="margin-top:0.75rem; color:#b91c1c; font-size:0.85rem;">
+        * No passengers available. Please <a href="{% url 'passenger_list' %}">add a passenger</a> first before booking.
+    </p>
+    {% endif %}
+</div>
+
+<!-- All Bookings List Table -->
+<div class="card">
+    <h3>All Passenger Flight Bookings</h3>
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>Passenger Name</th>
+                <th>Contact Email</th>
+                <th>Flight Details</th>
+                <th>Route</th>
+                <th>Departure Date</th>
+                <th>Booking Timestamp</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in bookings %}
+            <tr>
+                <td><strong>#BK-{{ b.id }}</strong></td>
+                <td><strong>{{ b.passenger.name }}</strong></td>
+                <td>{{ b.passenger.email }}</td>
+                <td><strong>{{ b.flight.flight_number }}</strong></td>
+                <td>{{ b.flight.source }} → {{ b.flight.destination }}</td>
+                <td>{{ b.flight.departure_date|date:"Y-m-d" }}</td>
+                <td>{{ b.booking_date|date:"Y-m-d H:i" }}</td>
+                <td>
+                    <a href="{% url 'cancel_booking' b.id %}" class="btn btn-delete" onclick="return confirm('Cancel booking #BK-{{ b.id }}?')">Cancel Booking</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">
+                    No bookings recorded yet. Use the form above to book a flight.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

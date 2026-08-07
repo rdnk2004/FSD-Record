@@ -3,195 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}SkyBound Flights | Flight Booking System{% endblock %}</title>
+    <title>{% block title %}Flight Management System{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #0284c7;
             --primary-hover: #0369a1;
-            --primary-dark: #0f172a;
-            --accent: #38bdf8;
-            --bg-main: #f8fafc;
+            --bg: #f8fafc;
             --surface: #ffffff;
-            --surface-glass: rgba(255, 255, 255, 0.85);
-            --text-dark: #0f172a;
+            --text: #0f172a;
             --text-muted: #64748b;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.05);
-            --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.05);
-            --radius-md: 12px;
-            --radius-lg: 16px;
+            --border: #cbd5e1;
+            --radius: 8px;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', system-ui, sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            background-color: var(--bg-main);
-            color: var(--text-dark);
+            background-color: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* Navbar */
         .navbar {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background-color: #0f172a;
             color: white;
-            padding: 1rem 2rem;
+            padding: 0.9rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: var(--shadow-md);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: white;
             text-decoration: none;
-            letter-spacing: -0.5px;
-        }
-
-        .brand-icon {
-            background: linear-gradient(135deg, var(--accent), var(--primary));
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+            gap: 0.5rem;
         }
 
         .nav-links {
             display: flex;
+            gap: 1rem;
             align-items: center;
-            gap: 1.25rem;
         }
 
         .nav-link {
-            color: #94a3b8;
+            color: #cbd5e1;
             text-decoration: none;
+            font-size: 0.9rem;
             font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
             transition: all 0.2s ease;
         }
 
         .nav-link:hover, .nav-link.active {
             color: white;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,0.1);
         }
 
-        .nav-link.btn-admin {
-            background: var(--primary);
-            color: white;
-        }
-
-        .nav-link.btn-admin:hover {
-            background: var(--primary-hover);
-        }
-
-        /* Layout Container */
         .container {
-            max-width: 1200px;
+            max-width: 1100px;
             width: 100%;
             margin: 2rem auto;
             padding: 0 1.5rem;
             flex: 1;
         }
 
-        /* Alerts */
-        .alert-container {
+        .messages {
             margin-bottom: 1.5rem;
         }
 
         .alert {
-            padding: 1rem 1.25rem;
-            border-radius: var(--radius-md);
-            margin-bottom: 0.75rem;
+            padding: 0.85rem 1.2rem;
+            border-radius: var(--radius);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
             font-weight: 500;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
         .alert-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
         .alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
         .alert-info { background: #e0f2fe; color: #075985; border: 1px solid #bae6fd; }
 
-        /* Typography & Badges */
-        h1, h2, h3, h4 {
-            font-family: 'Outfit', sans-serif;
-            color: var(--text-dark);
-        }
-
-        .badge {
-            padding: 0.25rem 0.65rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
             display: inline-block;
+            transition: background 0.2s ease;
         }
 
-        .badge-available { background: #dcfce7; color: #15803d; }
-        .badge-full { background: #fee2e2; color: #b91c1c; }
-        .badge-confirmed { background: #e0f2fe; color: #0369a1; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-secondary { background: #64748b; color: white; }
+        .btn-secondary:hover { background: #475569; }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-edit { background: #0284c7; color: white; padding: 0.35rem 0.75rem; font-size: 0.8rem; }
+        .btn-delete { background: #ef4444; color: white; padding: 0.35rem 0.75rem; font-size: 0.8rem; }
 
-        /* Footer */
+        .card {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .styled-table th {
+            background: #f1f5f9;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 2px solid var(--border);
+            color: var(--text);
+        }
+
+        .styled-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .styled-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.35rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.6rem 0.85rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
         footer {
             background: #0f172a;
-            color: #64748b;
+            color: #94a3b8;
             text-align: center;
-            padding: 1.5rem;
-            font-size: 0.875rem;
-            border-top: 1px solid #1e293b;
+            padding: 1.25rem;
+            font-size: 0.85rem;
             margin-top: auto;
         }
     </style>
 </head>
 <body>
     <nav class="navbar">
-        <a href="{% url 'index' %}" class="brand">
-            <span class="brand-icon">✈</span>
-            SkyBound Flights
-        </a>
+        <a href="{% url 'dashboard' %}" class="brand">✈ Flight Management System</a>
         <div class="nav-links">
-            <a href="{% url 'index' %}" class="nav-link">Available Flights</a>
-            <a href="{% url 'index' %}#bookings-section" class="nav-link">Bookings List</a>
-            <a href="{% url 'manage_flights' %}" class="nav-link btn-admin">Manage Flights (Admin CRUD)</a>
-            <a href="/admin/" target="_blank" class="nav-link" style="font-size:0.85rem; border:1px solid rgba(255,255,255,0.2)">Django Admin ⚙</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
+                <a href="{% url 'flight_list' %}" class="nav-link">Flights CRUD</a>
+                <a href="{% url 'passenger_list' %}" class="nav-link">Passengers CRUD</a>
+                <a href="{% url 'booking_list' %}" class="nav-link">Bookings</a>
+                <span style="color:#cbd5e1; font-size:0.85rem; margin-left:0.5rem;">User: <strong>{{ user.username }}</strong></span>
+                <a href="{% url 'logout_user' %}" class="nav-link" style="color:#f87171;">Logout</a>
+            {% else %}
+                <a href="{% url 'login_user' %}" class="nav-link">Login</a>
+                <a href="{% url 'register_user' %}" class="nav-link" style="background:var(--primary); color:white;">Register</a>
+            {% endif %}
         </div>
     </nav>
 
     <main class="container">
         {% if messages %}
-        <div class="alert-container">
+        <div class="messages">
             {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                <span>{{ message }}</span>
-            </div>
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
             {% endfor %}
         </div>
         {% endif %}
@@ -200,7 +218,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 SkyBound Flight Booking System — Full Stack Development (FSD) Lab Record Project</p>
+        <p>&copy; 2026 Flight Management System — Django Academic Project</p>
     </footer>
 </body>
 </html>

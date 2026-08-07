@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | Flight Management System{% endblock %}
+
+{% block content %}
+<style>
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.25rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin: 0.25rem 0;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+    }
+
+    .search-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        margin-bottom: 2rem;
+    }
+
+    .search-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) 120px;
+        gap: 1rem;
+        align-items: flex-end;
+    }
+</style>
+
+<h1 style="margin-bottom: 1.5rem;">Flight Management System Dashboard</h1>
+
+<!-- Dashboard Counters (Requirement 7) -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">Total Flights</div>
+        <div class="stat-number">{{ total_flights }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Total Passengers</div>
+        <div class="stat-number">{{ total_passengers }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Total Bookings</div>
+        <div class="stat-number">{{ total_bookings }}</div>
+    </div>
+</div>
+
+<!-- Flight Search Module (Requirement 7) -->
+<div class="search-card">
+    <h3 style="margin-bottom: 1rem; color: var(--primary);">Search Flights</h3>
+    <form method="GET" action="{% url 'dashboard' %}" class="search-grid">
+        <div class="form-group" style="margin:0;">
+            <label>Source City</label>
+            <input type="text" name="source" value="{{ source_query }}" placeholder="e.g. Mumbai" class="form-control">
+        </div>
+        <div class="form-group" style="margin:0;">
+            <label>Destination City</label>
+            <input type="text" name="destination" value="{{ dest_query }}" placeholder="e.g. Delhi" class="form-control">
+        </div>
+        <div class="form-group" style="margin:0;">
+            <label>Departure Date</label>
+            <input type="date" name="departure_date" value="{{ date_query }}" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+</div>
+
+<!-- Search Results / All Available Flights -->
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3>Flights Overview</h3>
+        {% if source_query or dest_query or date_query %}
+        <a href="{% url 'dashboard' %}" style="font-size:0.85rem; color:var(--primary);">Clear Search Filters ✕</a>
+        {% endif %}
+    </div>
+
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Flight #</th>
+                <th>Source</th>
+                <th>Destination</th>
+                <th>Departure Date</th>
+                <th>Price (₹)</th>
+                <th>Available Seats</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for flight in flights %}
+            <tr>
+                <td><strong>{{ flight.flight_number }}</strong></td>
+                <td>{{ flight.source }}</td>
+                <td>{{ flight.destination }}</td>
+                <td>{{ flight.departure_date|date:"Y-m-d" }}</td>
+                <td>₹{{ flight.price }}</td>
+                <td>
+                    {% if flight.available_seats > 0 %}
+                    <span style="font-weight: 600; color: #166534;">{{ flight.available_seats }} Seats</span>
+                    {% else %}
+                    <span style="font-weight: 600; color: #991b1b;">0 Seats (Full)</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'booking_list' %}" class="btn btn-primary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">Book Now</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                    No flights found matching the search criteria.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Recent Bookings Table -->
+<div class="card">
+    <h3>Recent Bookings</h3>
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>Passenger</th>
+                <th>Flight</th>
+                <th>Route</th>
+                <th>Booking Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in recent_bookings %}
+            <tr>
+                <td>#BK-{{ booking.id }}</td>
+                <td><strong>{{ booking.passenger.name }}</strong></td>
+                <td>{{ booking.flight.flight_number }}</td>
+                <td>{{ booking.flight.source }} → {{ booking.flight.destination }}</td>
+                <td>{{ booking.booking_date|date:"Y-m-d H:i" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">
+                    No recent bookings recorded yet.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

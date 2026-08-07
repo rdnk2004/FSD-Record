@@ -3,27 +3,34 @@ from django.db import models
 
 class Flight(models.Model):
     flight_number = models.CharField(max_length=20, unique=True)
-    airline = models.CharField(max_length=100)
-    origin = models.CharField(max_length=100)
+    source = models.CharField(max_length=100)
     destination = models.CharField(max_length=100)
-    departure_time = models.DateTimeField()
-    arrival_time = models.DateTimeField()
+    departure_date = models.DateField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     available_seats = models.IntegerField()
     objects = models.Manager()
 
     def __str__(self) -> str:
-        return f"{self.flight_number} - {self.airline} ({self.origin} -> {self.destination})"
+        return f"{self.flight_number} ({self.source} -> {self.destination})"
 
-class Booking(models.Model):
-    passenger_name = models.CharField(max_length=100)
-    passenger_email = models.EmailField()
-    passenger_phone = models.CharField(max_length=20)
-    flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name='bookings')
-    seats_booked = models.IntegerField(default=1)
-    booking_date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=20, default='Confirmed')
+class Passenger(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=15)
+    passport_number = models.CharField(max_length=20, unique=True)
     objects = models.Manager()
 
     def __str__(self) -> str:
-        return f"Booking #{self.id} - {self.passenger_name} ({self.flight.flight_number})"
+        return f"{self.name} ({self.passport_number})"
+
+class Booking(models.Model):
+    passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE, related_name='bookings')
+    flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name='bookings')
+    booking_date = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
+
+    class Meta:
+        unique_together = ('passenger', 'flight')
+
+    def __str__(self) -> str:
+        return f"{self.passenger.name} - {self.flight.flight_number}"
