@@ -20,6 +20,10 @@ Django-Cycle2/
 │   ├── manage.py
 │   ├── employee_project/
 │   └── employee_app/
+├── flight_booking/          # Program 4: Flight Booking System
+│   ├── manage.py
+│   ├── flight_booking_project/
+│   └── booking_app/
 ├── venv/                    # Virtual Environment
 ├── .gitignore               # Git Ignore Configuration
 └── README.md                # Project Documentation
@@ -53,6 +57,16 @@ Django-Cycle2/
   - Department creation and categorization.
   - Employee profile management (Name, ID, Email, Salary, Department).
   - Department-wise employee filtering and name searching.
+
+### 4. Flight Booking System (`flight_booking`)
+* **Question**: Design and develop a flight booking system (Booking table for all display) with an elegant available flights page, Django admin page, models for flight details and bookings, a management page with a table listing all flights with options for updating and deleting, searching flights by criteria, and booking options.
+* **Key Models**: `Flight`, `Booking`
+* **Key Features**:
+  - Available flights display with elegant cards, status badges, and booking options.
+  - Flight search & filter by keyword/flight #, origin, and destination.
+  - Flight Booking table displaying all passenger bookings with cancellation options.
+  - Flight Management Dashboard with full CRUD table (Add, Update, Delete flight records).
+  - Django Admin interface for model management (`/admin/`).
 
 ---
 
@@ -98,6 +112,15 @@ cd employee_management
 python manage.py runserver
 ```
 * Access at: `http://127.0.0.1:8000/`
+
+### Option D: Run Flight Booking System
+```powershell
+cd flight_booking
+python manage.py runserver
+```
+* Access at: `http://127.0.0.1:8000/`
+* Admin Access at: `http://127.0.0.1:8000/admin/` (User: `admin`, Pass: `admin123`)
+
 
 ---
 

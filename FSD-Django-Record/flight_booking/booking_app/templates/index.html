@@ -1,0 +1,430 @@
+{% extends 'base.html' %}
+
+{% block title %}Search & Book Flights | SkyBound{% endblock %}
+
+{% block content %}
+<style>
+    /* Hero Header */
+    .hero-banner {
+        background: linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #0f172a 100%);
+        color: white;
+        padding: 2.5rem 2rem;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-banner h1 {
+        font-size: 2.25rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        color: white;
+    }
+
+    .hero-banner p {
+        color: #bae6fd;
+        font-size: 1.05rem;
+        max-width: 600px;
+    }
+
+    /* Search Bar Card */
+    .search-card {
+        background: var(--surface);
+        padding: 1.5rem;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border);
+        margin-top: 1.5rem;
+    }
+
+    .search-form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) 120px;
+        gap: 1rem;
+        align-items: flex-end;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: border-color 0.2s ease;
+        background: #f8fafc;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .btn {
+        padding: 0.75rem 1.25rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        text-decoration: none;
+    }
+
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-dark); }
+    .btn-outline:hover { background: #f1f5f9; }
+    .btn-danger-sm { background: #fee2e2; color: #b91c1c; padding: 0.4rem 0.75rem; font-size: 0.825rem; border-radius: 6px; }
+    .btn-danger-sm:hover { background: #fca5a5; }
+
+    /* Flight Cards Grid */
+    .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.25rem;
+    }
+
+    .flights-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .flight-card {
+        background: var(--surface);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-sm);
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .flight-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        border-color: #cbd5e1;
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 1px dashed var(--border);
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .airline-info h3 {
+        font-size: 1.15rem;
+        color: var(--text-dark);
+    }
+
+    .flight-no {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .price-tag {
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    .route-display {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.25rem;
+        text-align: center;
+    }
+
+    .city-box {
+        flex: 1;
+    }
+
+    .city-box strong {
+        display: block;
+        font-size: 1.1rem;
+        color: var(--text-dark);
+    }
+
+    .city-box span {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    .flight-arrow {
+        color: var(--primary);
+        font-size: 1.25rem;
+        font-weight: bold;
+        padding: 0 0.5rem;
+    }
+
+    .flight-details-list {
+        background: #f8fafc;
+        padding: 0.75rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        display: flex;
+        justify-content: space-between;
+        color: var(--text-muted);
+        margin-bottom: 1.25rem;
+    }
+
+    /* Booking Form inside details / modal */
+    .booking-box {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .booking-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    /* Table Component */
+    .table-card {
+        background: var(--surface);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+        margin-bottom: 3rem;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 0.9rem;
+    }
+
+    .styled-table th {
+        background: #f1f5f9;
+        color: var(--text-dark);
+        padding: 1rem 1.25rem;
+        font-weight: 600;
+        border-bottom: 2px solid var(--border);
+    }
+
+    .styled-table td {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--border);
+        color: var(--text-dark);
+    }
+
+    .styled-table tbody tr:hover {
+        background-color: #f8fafc;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1.5rem;
+        color: var(--text-muted);
+    }
+</style>
+
+<!-- Hero Section & Search -->
+<div class="hero-banner">
+    <h1>Find & Book Your Flight</h1>
+    <p>Search available flights, compare schedules, and secure your booking instantly.</p>
+
+    <div class="search-card">
+        <form method="GET" action="{% url 'index' %}" class="search-form">
+            <div class="form-group">
+                <label>Keyword / Flight #</label>
+                <input type="text" name="query" value="{{ search_query }}" placeholder="e.g. AI-202 or IndiGo" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Origin</label>
+                <input type="text" name="origin" value="{{ origin_filter }}" placeholder="e.g. Mumbai" class="form-control" list="origin-list">
+                <datalist id="origin-list">
+                    {% for o in origins %}<option value="{{ o }}">{% endfor %}
+                </datalist>
+            </div>
+            <div class="form-group">
+                <label>Destination</label>
+                <input type="text" name="destination" value="{{ destination_filter }}" placeholder="e.g. Delhi" class="form-control" list="dest-list">
+                <datalist id="dest-list">
+                    {% for d in destinations %}<option value="{{ d }}">{% endfor %}
+                </datalist>
+            </div>
+            <button type="submit" class="btn btn-primary">🔍 Search</button>
+        </form>
+    </div>
+</div>
+
+<!-- Section 1: Available Flights Display -->
+<div class="section-title">
+    <h2>Available Flights</h2>
+    {% if search_query or origin_filter or destination_filter %}
+        <a href="{% url 'index' %}" class="btn btn-outline" style="padding:0.4rem 0.8rem; font-size:0.85rem;">Clear Filters ✕</a>
+    {% endif %}
+</div>
+
+{% if flights %}
+<div class="flights-grid">
+    {% for flight in flights %}
+    <div class="flight-card">
+        <div>
+            <div class="card-header">
+                <div class="airline-info">
+                    <h3>{{ flight.airline }}</h3>
+                    <span class="flight-no">{{ flight.flight_number }}</span>
+                </div>
+                <div class="price-tag">₹{{ flight.price }}</div>
+            </div>
+
+            <div class="route-display">
+                <div class="city-box">
+                    <strong>{{ flight.origin }}</strong>
+                    <span>Dep: {{ flight.departure_time|date:"M d, H:i" }}</span>
+                </div>
+                <div class="flight-arrow">✈</div>
+                <div class="city-box">
+                    <strong>{{ flight.destination }}</strong>
+                    <span>Arr: {{ flight.arrival_time|date:"M d, H:i" }}</span>
+                </div>
+            </div>
+
+            <div class="flight-details-list">
+                <span>Seats Available: <strong>{{ flight.available_seats }}</strong></span>
+                <span>
+                    {% if flight.available_seats > 0 %}
+                        <span class="badge badge-available">Seats Available</span>
+                    {% else %}
+                        <span class="badge badge-full">Sold Out</span>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
+        {% if flight.available_seats > 0 %}
+        <div class="booking-box">
+            <details>
+                <summary class="btn btn-primary" style="width:100%; text-align:center; display:block; cursor:pointer;">Book This Flight</summary>
+                <form method="POST" action="{% url 'book_flight' flight.id %}" class="booking-form" style="margin-top:1rem;">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Passenger Name</label>
+                        <input type="text" name="passenger_name" required placeholder="Full Name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" name="passenger_email" required placeholder="email@example.com" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" name="passenger_phone" required placeholder="+91 9876543210" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Seats to Book</label>
+                        <input type="number" name="seats_booked" value="1" min="1" max="{{ flight.available_seats }}" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width:100%;">Confirm Booking 🎟</button>
+                </form>
+            </details>
+        </div>
+        {% else %}
+        <button disabled class="btn btn-outline" style="width:100%; opacity:0.6; cursor:not-allowed;">Flight Fully Booked</button>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state card-card" style="background:white; padding:3rem; border-radius:12px; margin-bottom:3rem;">
+    <h3>No Flights Found</h3>
+    <p>Try adjusting your search criteria or clear the filters.</p>
+</div>
+{% endif %}
+
+<!-- Section 2: Booking Table for All Display -->
+<div id="bookings-section" class="section-title">
+    <h2>Flight Bookings Record (All Passenger Bookings Table)</h2>
+</div>
+
+<div class="table-card">
+    <div class="table-responsive">
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Passenger Name</th>
+                    <th>Contact Info</th>
+                    <th>Flight Details</th>
+                    <th>Route</th>
+                    <th>Seats</th>
+                    <th>Booking Time</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <td><strong>#BK-{{ booking.id }}</strong></td>
+                    <td><strong>{{ booking.passenger_name }}</strong></td>
+                    <td>
+                        <div style="font-size:0.85rem;">{{ booking.passenger_email }}</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">{{ booking.passenger_phone }}</div>
+                    </td>
+                    <td>
+                        <div><strong>{{ booking.flight.airline }}</strong></div>
+                        <div style="font-size:0.8rem; color:var(--primary); font-weight:600;">{{ booking.flight.flight_number }}</div>
+                    </td>
+                    <td>
+                        <div>{{ booking.flight.origin }} → {{ booking.flight.destination }}</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">Dep: {{ booking.flight.departure_time|date:"M d, H:i" }}</div>
+                    </td>
+                    <td><strong>{{ booking.seats_booked }}</strong></td>
+                    <td>{{ booking.booking_date|date:"M d, Y H:i" }}</td>
+                    <td><span class="badge badge-confirmed">{{ booking.status }}</span></td>
+                    <td>
+                        <a href="{% url 'cancel_booking' booking.id %}" class="btn-danger-sm" onclick="return confirm('Cancel this flight booking?')">Cancel</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9" class="empty-state">No flight bookings recorded yet. Book a flight above to see it here!</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

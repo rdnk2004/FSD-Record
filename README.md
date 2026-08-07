@@ -30,7 +30,8 @@ FSD-Record/
 ├── FSD-Django-Record/       # Cycle 2: Full-Stack Web Applications (Django Framework)
 │   ├── product_inventory/   # Program 1: Product Inventory Management System
 │   ├── course_registration/ # Program 2: Student Course Registration System
-│   └── employee_management/ # Program 3: Department & Employee Management System
+│   ├── employee_management/ # Program 3: Department & Employee Management System
+│   └── flight_booking/      # Program 4: Flight Booking System
 │
 └── README.md                # Main Academic Record Documentation
 ```
@@ -83,6 +84,12 @@ Built using **Python 3** and **Django Web Framework**, this section contains mod
 * **Features**: Department creation, employee profile management (Name, ID, Email, Salary, Department), department-wise filtering, and name search.
 * **Key Models**: `Department`, `Employee`
 * **Location**: `FSD-Django-Record/employee_management`
+
+#### 4. Flight Booking System (`flight_booking`)
+* **Features**: Flight search by origin/destination/keyword, flight details cards & available seats tracking, instant flight booking, passenger booking history table with cancellations, CRUD flight management dashboard (Add, Edit, Delete flights), and Django Admin integration.
+* **Key Models**: `Flight`, `Booking`
+* **Location**: `FSD-Django-Record/flight_booking`
+
 
 ---
 
