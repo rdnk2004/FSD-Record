@@ -8,5 +8,4 @@ def contact_view(request):
             return redirect('success')
     else:
         form = ContactForm()
-    
     return render(request, 'contact.html', {'form': form})
