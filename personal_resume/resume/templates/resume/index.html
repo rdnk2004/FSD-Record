@@ -1,0 +1,408 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ resume.name }} - Resume / Profile</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #eef2f5;
+            color: #333333;
+            line-height: 1.6;
+            padding: 30px 15px;
+        }
+        .resume-container {
+            max-width: 960px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        /* Header Section */
+        .header {
+            display: flex;
+            align-items: center;
+            background: #1f2937;
+            color: #ffffff;
+            padding: 35px 40px;
+            gap: 30px;
+        }
+        .profile-photo {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 4px solid #3b82f6;
+            object-fit: cover;
+            background: #ffffff;
+            flex-shrink: 0;
+        }
+        .header-info h1 {
+            font-size: 32px;
+            margin-bottom: 5px;
+            color: #ffffff;
+        }
+        .header-info .title {
+            font-size: 17px;
+            color: #93c5fd;
+            margin-bottom: 14px;
+            font-weight: 500;
+        }
+        .contact-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 14px;
+            color: #d1d5db;
+        }
+        .contact-item span {
+            color: #60a5fa;
+            font-weight: bold;
+            margin-right: 4px;
+        }
+        /* Two Column Body Layout */
+        .resume-body {
+            display: grid;
+            grid-template-columns: 310px 1fr;
+            gap: 30px;
+            padding: 35px 40px;
+        }
+        /* Section styling */
+        .section {
+            margin-bottom: 28px;
+        }
+        .section-title {
+            font-size: 18px;
+            color: #1f2937;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #3b82f6;
+            padding-bottom: 6px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+        }
+        /* Left Column Specifics */
+        .sidebar {
+            background-color: #f8fafc;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        .info-list {
+            list-style: none;
+        }
+        .info-list li {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #475569;
+        }
+        .info-list li strong {
+            color: #1e293b;
+            display: block;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+        .skills-group {
+            margin-bottom: 14px;
+        }
+        .skills-group h4 {
+            font-size: 14px;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .skill-badge {
+            background: #e0e7ff;
+            color: #3730a3;
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .bullet-list {
+            list-style-type: square;
+            padding-left: 20px;
+            font-size: 14px;
+            color: #475569;
+        }
+        .bullet-list li {
+            margin-bottom: 8px;
+        }
+        /* Main Content Specifics */
+        .objective-text {
+            font-size: 15px;
+            color: #475569;
+            text-align: justify;
+        }
+        .timeline-item {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+        .timeline-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+        .item-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .item-duration {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 600;
+        }
+        .item-subtitle {
+            font-size: 14px;
+            color: #2563eb;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+        .item-score {
+            font-size: 13px;
+            font-weight: 600;
+            color: #059669;
+        }
+        .item-desc {
+            font-size: 14px;
+            color: #475569;
+        }
+        .tech-pill {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 6px;
+        }
+        /* Print Actions */
+        .action-bar {
+            max-width: 960px;
+            margin: 0 auto 15px auto;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .btn-print {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-print:hover {
+            background-color: #1d4ed8;
+        }
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .action-bar {
+                display: none;
+            }
+            .resume-container {
+                box-shadow: none;
+            }
+        }
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .resume-body {
+                grid-template-columns: 1fr;
+            }
+            .contact-bar {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="action-bar">
+        <button class="btn-print" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+
+    <div class="resume-container">
+        <!-- 1. Header with Profile Photo, Name, Title & Contact -->
+        <header class="header">
+            <img src="{% static 'resume/profile.svg' %}" alt="Profile Photo" class="profile-photo">
+            <div class="header-info">
+                <h1>{{ resume.name }}</h1>
+                <div class="title">{{ resume.title }}</div>
+                
+                <!-- Contact Information in Header -->
+                <div class="contact-bar">
+                    <div class="contact-item"><span>Email:</span> {{ resume.contact.Email }}</div>
+                    <div class="contact-item"><span>Phone:</span> {{ resume.contact.Phone }}</div>
+                    <div class="contact-item"><span>Location:</span> {{ resume.personal_info.Location }}</div>
+                    <div class="contact-item"><span>LinkedIn:</span> {{ resume.contact.LinkedIn }}</div>
+                    <div class="contact-item"><span>GitHub:</span> {{ resume.contact.GitHub }}</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="resume-body">
+            <!-- Left Column: Personal Info, Skills, Languages, Hobbies, Certifications -->
+            <aside class="sidebar">
+                <!-- 2. Personal Information -->
+                <section class="section">
+                    <h3 class="section-title">Personal Info</h3>
+                    <ul class="info-list">
+                        {% for key, val in resume.personal_info.items %}
+                            <li>
+                                <strong>{{ key }}</strong>
+                                {{ val }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+
+                <!-- 3. Skills -->
+                <section class="section">
+                    <h3 class="section-title">Skills</h3>
+                    {% for category, skill_list in resume.skills.items %}
+                        <div class="skills-group">
+                            <h4>{{ category }}</h4>
+                            <div class="skill-tags">
+                                {% for skill in skill_list %}
+                                    <span class="skill-badge">{{ skill }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </section>
+
+                <!-- 4. Certifications -->
+                <section class="section">
+                    <h3 class="section-title">Certifications</h3>
+                    <ul class="bullet-list">
+                        {% for cert in resume.certifications %}
+                            <li>{{ cert }}</li>
+                        {% endfor %}
+                    </ul>
+                </section>
+
+                <!-- 5. Languages -->
+                <section class="section">
+                    <h3 class="section-title">Languages</h3>
+                    <ul class="info-list">
+                        {% for lang in resume.languages %}
+                            <li>
+                                <strong>{{ lang.name }}</strong>
+                                {{ lang.proficiency }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+
+                <!-- 6. Hobbies -->
+                <section class="section">
+                    <h3 class="section-title">Hobbies</h3>
+                    <div class="skill-tags">
+                        {% for hobby in resume.hobbies %}
+                            <span class="skill-badge" style="background:#f1f5f9; color:#334155;">{{ hobby }}</span>
+                        {% endfor %}
+                    </div>
+                </section>
+            </aside>
+
+            <!-- Right Column: Career Objective, Education, Experience, Projects, Achievements -->
+            <main class="main-content">
+                <!-- 7. Career Objective -->
+                <section class="section">
+                    <h3 class="section-title">Career Objective</h3>
+                    <p class="objective-text">{{ resume.career_objective }}</p>
+                </section>
+
+                <!-- 8. Education -->
+                <section class="section">
+                    <h3 class="section-title">Education</h3>
+                    {% for edu in resume.education %}
+                        <div class="timeline-item">
+                            <div class="item-header">
+                                <span class="item-title">{{ edu.degree }}</span>
+                                <span class="item-duration">{{ edu.duration }}</span>
+                            </div>
+                            <div class="item-subtitle">{{ edu.institution }}</div>
+                            <div class="item-score">{{ edu.score }}</div>
+                        </div>
+                    {% endfor %}
+                </section>
+
+                <!-- 9. Work Experience -->
+                <section class="section">
+                    <h3 class="section-title">Work Experience</h3>
+                    {% for exp in resume.experience %}
+                        <div class="timeline-item">
+                            <div class="item-header">
+                                <span class="item-title">{{ exp.role }}</span>
+                                <span class="item-duration">{{ exp.duration }}</span>
+                            </div>
+                            <div class="item-subtitle">{{ exp.company }} ({{ exp.location }})</div>
+                            <ul class="bullet-list">
+                                {% for resp in exp.responsibilities %}
+                                    <li>{{ resp }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endfor %}
+                </section>
+
+                <!-- 10. Projects -->
+                <section class="section">
+                    <h3 class="section-title">Projects</h3>
+                    {% for proj in resume.projects %}
+                        <div class="timeline-item">
+                            <div class="item-header">
+                                <span class="item-title">{{ proj.title }}</span>
+                            </div>
+                            <span class="tech-pill">Tech Stack: {{ proj.tech }}</span>
+                            <p class="item-desc">{{ proj.description }}</p>
+                        </div>
+                    {% endfor %}
+                </section>
+
+                <!-- 11. Achievements -->
+                <section class="section">
+                    <h3 class="section-title">Achievements</h3>
+                    <ul class="bullet-list">
+                        {% for ach in resume.achievements %}
+                            <li>{{ ach }}</li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>
